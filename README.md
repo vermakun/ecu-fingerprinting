@@ -2,8 +2,8 @@
 A Python based project that uses a neural network to categorize messages from known ECUs on a CAN vehicle network.
 
 ## Project: In-Vehicle Security using Pattern Recognition Techniques
-Created:   2021.08.05
-Submitted: 2021.08.20
+Created | 2021.08.05
+Submitted | 2021.08.20
 
 ## Contact
 Kunaal Verma - vermakun@umich.edu
