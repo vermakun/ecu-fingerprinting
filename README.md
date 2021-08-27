@@ -22,7 +22,7 @@ Under section "I. Initialization"
 
 Under section "II. File-preconditioning"
 
-	Look for the line declaring " datapath "
+	Look for the line declaring "datapath "
 	Make sure that "datapath" is directed to the provided Data folder path correctly.
 	If this is configured correctly, this section of the code should run without issue.
 	If not, make sure that this path is in your Python PATH variable.
