@@ -1,0 +1,7 @@
+1) This dataset is recorded from 8 ECUS
+
+2) Each folder contains 30 Excel files, all 30 files in each folder is data recorded from same ECU
+
+3) Further in each excel file, the data represents the voltages recorded from CAN High
+
+4) In CAN High 3.5 volts is transmitted for dominant bit and 2.5volts is sent for the recessive bit
