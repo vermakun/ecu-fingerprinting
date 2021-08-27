@@ -1,2 +1,39 @@
 # UMD-SS21-ECE-5831-ECU-Fingerprinting
 A Python based project that uses a neural network to categorize messages from known ECUs on a CAN vehicle network.
+
+In-Vehicle Security using Pattern Recognition Techniques
+Created: 2021.08.27
+Kunaal Verma - vermakun@umich.edu
+
+
+USAGE:
+
+Depending on your IDE environment, use the appropriate files when running the code:
+	ece_5831_project_methodX.ipynb (for Jupyter Notebooks)
+	ece_5831_project_methodX.py (Python 2.7/3.X)
+	
+	Note: X signifies a number, either 1 or 2, pertaining to different Pattern Recognition methods
+	1 - Control Parameter Features
+	2 - Control Parameter  + Spectral Analysis Features
+
+Under section "I. Initialization"
+	Make sure all relevant Python packages are installed before running the code
+
+Under section "II. File-preconditioning" ...
+	Look for the line declaring " datapath "
+	Make sure that "datapath" is directed to the provided Data folder path correctly.
+	If this is configured correctly, this section of the code should run without issue.
+	If not, make sure that this path is in your Python PATH variable.
+
+Under section "III. Feature Extraction"
+	Look for the line starting with " !cp "
+	This line should be commented out (it is used for Google Colab)
+	If not, make sure to comment it out
+	The rest of this section should run fine if MethodX.py is in the same
+		directory as ECE_5831_Project_MethodX.ipynb/.py
+		
+Under section "IV. Training and Test Datasets"
+	There are a number of commented out lines
+	These represent different feature selections for the neural network training
+	The only uncommented line is the the best performing featureset
+	Feel free to change featuresets by commenting/uncommenting lines in this section
