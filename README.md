@@ -33,7 +33,7 @@ Note: X signifies a number, either 1 or 2, pertaining to different Pattern Recog
 
 ## Initialization
 
-Make sure all relevant Python packages are installed before running the code
+* Make sure all relevant Python packages are installed before running the code
 
 ## File-preconditioning
 
