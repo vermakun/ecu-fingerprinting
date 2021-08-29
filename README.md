@@ -24,16 +24,6 @@ Kunaal Verma - vermakun@umich.edu
 
 # Usage
 
-*Legacy*:
-
-Depending on your IDE environment, use the appropriate files when running the code:
-* ece_5831_project_methodX.ipynb (for Jupyter Notebooks)
-* ece_5831_project_methodX.py (Python 2.7/3.X)
-	
-Note: X signifies a number, either 1 or 2, pertaining to different Pattern Recognition methods
-1. Control Parameter Features
-2. Control Parameter + Spectral Analysis Features
-
 *New*:
 
 Two primary files are provided: 
