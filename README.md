@@ -11,7 +11,7 @@ Created | Submitted | Updated
 Kunaal Verma - vermakun@umich.edu
 
 # Current Task List
-- [ ] Add relevant files to GitHub repository
+- [x] Add relevant files to GitHub repository
 - [ ] Add LaTeX report files
 - [ ] Cleanup filenames, references, and general usage information
 - [ ] Modify Record class to produce output for legacy Methods 1 & 2 (Control + Spectral Analysis)
