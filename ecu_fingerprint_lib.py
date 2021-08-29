@@ -526,14 +526,14 @@ class Record:
 
     self.dom_sd = []
     for i in np.arange(len(self.dom_pulse_data)):
-      f, pd = signal.welch(self.dom_pulse_data[i], Record.sr);
+      f, pd = signal.welch(self.dom_pulse_data[i], Record.sr, nperseg=len(self.dom_pulse_data[i]));
       self.dom_sd.append(binned_sd(pd, dom_nbin[bin_sel]))
 
     rec_nbin = [10, 8, 5]    # Bin size limited by pulse length
 
     self.rec_sd = []
     for i in np.arange(len(self.rec_pulse_data)):
-      f, pd = signal.welch(self.rec_pulse_data[i], Record.sr);
+      f, pd = signal.welch(self.rec_pulse_data[i], Record.sr, nperseg=len(self.rec_pulse_data[i]));
       self.rec_sd.append(binned_sd(pd, rec_nbin[bin_sel]))
 
 
@@ -548,8 +548,8 @@ class Record:
         (np.arange(len(cur_array)) <= -index_shift-1).astype(float)*np.average(self.rec_ssv)
       noise = signl - cur_array
 
-      f, s_pd = signal.welch(signl, Record.sr);
-      f, n_pd = signal.welch(noise, Record.sr);
+      f, s_pd = signal.welch(signl, Record.sr, nperseg=len(signl));
+      f, n_pd = signal.welch(noise, Record.sr, nperseg=len(noise));
 
       Ps = sum(s_pd)
       Pn = sum(n_pd)
@@ -566,8 +566,8 @@ class Record:
         (np.arange(len(cur_array)) <= -index_shift-2).astype(float)*np.average(self.dom_ssv)
       noise = signl - cur_array
   
-      f, s_pd = signal.welch(signl, Record.sr)
-      f, n_pd = signal.welch(noise, Record.sr)
+      f, s_pd = signal.welch(signl, Record.sr, nperseg=len(signl))
+      f, n_pd = signal.welch(noise, Record.sr, nperseg=len(noise))
 
       Ps = sum(s_pd)
       Pn = sum(n_pd)
@@ -590,7 +590,7 @@ class Record:
     self.dom_mdfr = []
     for i in np.arange(len(self.dom_pulse_data)):
       cur_pulse = self.dom_pulse_data[i]
-      f, pd = signal.welch(cur_pulse, Record.sr)
+      f, pd = signal.welch(cur_pulse, Record.sr, nperseg=len(cur_pulse))
 
       spl = splrep(f, pd, k=1)
       x2 = np.arange(f[0], f[-1],0.01)
@@ -609,7 +609,7 @@ class Record:
     self.rec_mdfr = []
     for i in np.arange(len(self.rec_pulse_data)):
       cur_pulse = self.rec_pulse_data[i]
-      f, pd = signal.welch(cur_pulse, Record.sr)
+      f, pd = signal.welch(cur_pulse, Record.sr, nperseg=len(cur_pulse))
 
       spl = splrep(f, pd, k=1)
       x2 = np.arange(f[0], f[-1],0.01)
