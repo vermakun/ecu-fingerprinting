@@ -1,6 +1,7 @@
 \documentclass[conference]{IEEEtran}
 \IEEEoverridecommandlockouts
 % The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+
 \usepackage{cite}
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{algorithmic}
@@ -27,7 +28,7 @@
 \newcolumntype{L}{>{\raggedright\arraybackslash}X}
 \usepackage{ltablex}
 \usepackage{siunitx}
-%\usepackage{caption}%
+
 \setlength{\LTcapwidth}{7in}
 \usepackage[flushleft]{threeparttablex}
 
@@ -37,10 +38,14 @@
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \begin{document}
 
+
+
 \title{ECU Identification using
 Step Response Characterization and Spectral Analysis with Neural Network Classification\\
 {\footnotesize \textsuperscript{}}
 }
+
+
 
 \author{
 
@@ -58,9 +63,12 @@ Dearborn, USA \\
 vermakun@umich.edu}
 }
 
-% make the title area
+
+
 \maketitle
-% As a general rule, do not put math, special symbols or citations
+
+
+
 \begin{abstract}
 Controller area network (CAN) protocol has been the predominant in-vehicle network architecture used by automotive manufacturers over the past 30 years, and it has proven to be a reliable architecture for the scaling growth of vehicle electrical systems into the information age. As in-vehicle electrical architectures increase in complexity, so do their value as targets of cybersecurity attacks and intrusion. CAN, being a legacy architecture, does not have in-built capabilities that can handle these new threats to security and safety. Interest in developing security measures to bring cybersecurity capabilities to CAN shall increase as manufacturers get more pressure from internal program teams, customers, and regulators to offer cybersecurity protection on these systems, especially in the face of new technologies like vehicle sensor networks, autonomous control, and mobile connectivity. This may force some manufacturers to plan for adoptation of new in-vehicle network protocols earlier than planned, and potentially abandon institutional knowledge and prior development work using CAN.
 
@@ -70,11 +78,17 @@ In this work we investigate further improvements on this method, increasing the 
 \medbreak
 \end{abstract}
 
+
+
 \begin{IEEEkeywords}
 Intrusion detection system (IDS), electronic control unit (ECU), controller area network (CAN), machine learning (ML), artificial neural network (ANN), performance matrix (PM), heuristic algorithms (HA), automotive electronics (AE).
 \end{IEEEkeywords}
 
+
+
 \maketitle
+
+
 
 \section{Introduction}
 
@@ -95,6 +109,8 @@ Once known ECUs have been successfully identified and integrated into a detectio
 
 The primary purpose of the system described in this paper is to verify messages coming from known ECUs using fingerprinting and pattern recognition techniques. It accomplishes this by relying on manufacturing and material variation in physical CAN channel wiring (material, length, shielding) and chipset/component part variance. An intrusive ECU can then be isolated using a fingerprinting module that runs in parallel with the network, sampling and checking messages to ensure unrecognized signals can be identified, alerted to, mitigated, ignored, and isolated.
 
+
+
 \section{Dataset Preparation}
 
 The dataset used in this paper is the same dataset used in Hafeez et. al. \cite{hafeez2019}, which includes CAN-High protocol data from 8 ECUs. Each ECU is recorded 30 times, with roughly 600 samples per record at 20 kHz. The records provided show a regular clock pulse from CAN-Hi Dominant Bit to Recessive Bit, with an 86\% duty-cycle of the Dominant Bit. CAN-Hi has two logic voltage levels: 3.5V for the Dominant Bit, 2.5V for the Recessive Bit. We will use this specification later when we calculate Steady-State Value (\ref{sec:SSV}), Steady-State Error (\ref{sec:SSE}), and Signal-to-Noise Ratio (\ref{sec:SNR}).
@@ -107,6 +123,8 @@ The dataset used in this paper is the same dataset used in Hafeez et. al. \cite{
 \end{figure}
 
 Analyzing the CAN-Hi Signal using various fingerprinting methods will allow us to create ML classifiers of varying accuracy.
+
+
 
 \section{Signal Processing Techniques}
 
@@ -148,11 +166,15 @@ Threshold detection is a relatively simple procedure that requires only a handfu
 \STATE $val\_loc = \textbf{FIND}( val\_min ) $
 \end{algorithmic}
 
+
+
 \section{Feature Selection}
 
 In the previous work by Hafeez et. al. \cite{hafeez2019} the featureset used for classification of specfic channels relied upon step response signal characteristics. The analysis performed in this paper will be repeat and confirm this work, and then go on to modify the featureset to include new features and remove features that prove to diminish performance unneccessarily.
 
 Unique features added in this work use characteristics derived from the frequency spectrum content of the unique pulses. First, the Power Spectral Density of each pulse is processed, from which we can extract more specific values. The hope is to identify new characteristics that provide new and sufficiently varied values that will allow the machine learning procedure to better separate ECU messages and provide more accurate classification results.
+
+
 
 \section{Step Response Acquisition}
 
@@ -216,7 +238,6 @@ Steady-State Value requires a moving average filter window size approximately eq
 \label{fig:SSV}
 \end{figure}
 
-
 \subsection{Steady-State Error} \label{sec:SSE}
 Steady State Error relies upon knowledge of the CAN-Hi specificication, in which logical Dominant and Recessive values are stated as 3.5V and 2.5V, respectively. We take the $SSV$ and subtract with the respective logical bit voltage that we are looking for:
 \begin{align*}
@@ -262,6 +283,8 @@ Rise Time is the amount of time the rising edge of a pulse reaches $SSV$. Determ
 
 \subsection{Delay Time}
 Similar to Rise Time, Delay Time is the amount of time the rising edge of a pulse reaches $0.5\,SSV$. Determining this value requires using half of each pulses' calculated $SSV$ and the thresholding method discussed in Section \ref{sec:Threshold}.
+
+
 
 \section{Spectral Analysis Acquisition}
 Spectral Features of each pulse can be evaluated through the use of Fast Fourier Transform algorithms. It is understood that the reader has some familiarity with this class of algorithm as it is ubiquitously used in engineering theory. With a frequency spectrum representation of our signal to work with, we can also extract other unique features that can provide additional performance increases to our neural network model.
@@ -340,9 +363,13 @@ Median Frequency is the frequency at which energy is split equivalent in the PSD
 \label{fig:MDF}
 \end{figure}
 
+
+
 \section{Feature Extraction}
 A Python class was created to process all the above Acquisition functions for an input record file. The Record object was then parsed for the pertinent feature data, and copied to a Python data dictionary sequentially, in addition to file metadata that included $CAN\_Id$, $Channel\_Length$, $Channel\_Medium$, $ECU\_Record\_Id$, and $Filepath$.
 Once this datadictionary was converted to a Pandas DataFrame, it could easily be parsed to produce the feature subsets to perform the machine learning process.
+
+
 
 \section{Machine Learning Methodology}
 Before training can occur, the dataset is split into a training and test set. A split of 70\% Training Data and 30\% Test Data was chosen. For the majority of development, this split in the data was not randomized in order to attain a consistent understanding of performance acrossing different subsets of features. After generalized performance was recorded, the training and datasets were completely randomized run to run in order to remove and training bias and overfitting that could influence performance results.
@@ -350,6 +377,8 @@ Before training can occur, the dataset is split into a training and test set. A 
 For all featuresets in this work, we trained a multi-layer perceptron neural network model to predict classifications for ECU in our testing set. We adopted use of the \textit{scikit-learn} MLPClassifier, which by default utilizes the Adam solver \cite{kingma2017adam}. For initial training, the hyperparameter values were chosen to be quite large in order to allow the solver to converge to a maximal solution. Early training typically used ~1000 Hidden Layers, ~3000 Epochs.
 
 After the model was trained, the remaining testing records were used to measure performance of the model. A confusion matrix was constructed with the actual values of the test set, and the predicted values of the model.
+
+
 
 \section{Performance Measurement}
 
@@ -428,6 +457,8 @@ Next, we added features one by one and evaluated performance until we no longer 
 
 The final featureset included only $SNR$, $SSV$, $SSE$, $MNF$, and $\%OS$. Overall, we were able to exclude features that did not provide significant value to the overall peformane of the neural network model, reducing computational cost in the training of the model.
 
+
+
 \section{Hyperparameter Tuning}
 
 Although earlier testing picked relatively large values for neural network hyperparameters, with maximum epochs of 3000 and maximum hidden layers of 1000, we wanted to see if there were points of diminishing return for both hyperparameters. The full featureset was used in both test cases below. As we can see in Fig. \ref{fig:EpochPerf} Epoch performance converges at around 500. This bore out in practice during testing, and towards the end of analysis 500 epochs were used as the default value and adjusted accordingly to maximize accuracy performance for each featureset.
@@ -457,6 +488,8 @@ Finally, as we can see in  Fig. \ref{fig:TimePerf} we can see a sharp increase i
 \label{fig:TimePerf}
 \end{figure}
 
+
+
 \section{Results}
 With our final featureset, we ran 20 randomized trials using the MLP Classifier, with a hyperparameter optimzation of 275 Hidden Layers and 500 Epochs. This resulted in the performance metrics shown in Fig. \ref{fig:M2opt}. This model, with feature reduction and hyperparameter optimzation, led to an overall accurazy of 98.76\%.
 
@@ -485,6 +518,8 @@ A comparison of all primary methods is shown in Fig. \ref{fig:final}. As we can 
 \label{fig:final}
 \end{figure}
 
+
+
 \section{Conclusion}
 \label{sec:concl}
 
@@ -494,8 +529,6 @@ This article expands upon existing work that establishes vehicle network ECUs an
 \pagebreak
 
 \bibliographystyle{IEEEtran}
-% argument is your BibTeX string definitions and bibliography database(s)
-%\bibliography{IEEEabrv,IEEEexample}
-\bibliography{ece5831_project}
+\bibliography{ecu_fingerprint}
 
 \end{document}
