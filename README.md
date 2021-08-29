@@ -24,8 +24,6 @@ Kunaal Verma - vermakun@umich.edu
 
 # Usage
 
-*New*:
-
 Two primary files are provided: 
 * ecu_fingerprint_sandbox.x - a feature sandbox that processes a single file to demonstrate how feature extraction calculations work
 * ecu_fingerprint_classification.x - processes all files within the Dataset and performs machine learning training and classification to identify  ECU records with a test set, with performance metrics calculated to compare selected featuresets and ML hyperparameters
