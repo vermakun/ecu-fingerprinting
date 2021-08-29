@@ -20,8 +20,11 @@ Kunaal Verma - vermakun@umich.edu
 - [ ] Propogate peak detection logic and remove redundant bug-related quick fixes
 - [ ] Create method in Record to handle object instantiation for Control features (similar to Spectral)
 - [ ] Add instantiation tags for various data subsets (Control, Spectral, Dominant, Recessive, etc.)
+- [ ] Fix SNR Signal and Raw Signal alignment for more accurate calculation
 
 # Usage
+
+*Legacy*:
 
 Depending on your IDE environment, use the appropriate files when running the code:
 * ece_5831_project_methodX.ipynb (for Jupyter Notebooks)
@@ -31,23 +34,38 @@ Note: X signifies a number, either 1 or 2, pertaining to different Pattern Recog
 1. Control Parameter Features
 2. Control Parameter + Spectral Analysis Features
 
+*New*:
+
+Two primary files are provided: 
+* ecu_fingerprint_sandbox.x - a feature sandbox that processes a single file to demonstrate how feature extraction calculations work
+* ecu_fingerprint_classification.x - processes all files within the Dataset and performs machine learning training and classification to identify  ECU records with a test set, with performance metrics calculated to compare selected featuresets and ML hyperparameters
+
+Also, depending on your IDE environment use the appropriate file types when running the code:
+* ecu_fingerprint_x.ipynb (for Jupyter Notebooks)
+* ecu_fingerprint_x.py    (Python 2.7/3.X)
+
 ## Initialization
 
-* Make sure all relevant Python packages are installed before running the code
+* Make sure all relevant Python packages are installed in your environment before running the code (not needed for Google Colab users):
+	* numpy
+	* pandas
+	* seaborn
+	* matplotlib
+	* scipy
+	* sklearn
+* For Google Colab users, the dataset and library files will need to be copied from your Google Drive. For this to work, you will need to make sure the corresponding lines of code indicated by ### Google Colab Only ### are uncommented. Follow instructions to enable Google Drive availability in your Colab instance.
 
 ## File-preconditioning
 
 * Look for the line declaring "datapath"
-* Make sure that "datapath" is directed to the provided Data folder path correctly.
-* If this is configured correctly, this section of the code should run without issue.
-* If not, make sure that this path is in your Python PATH variable.
+	* For non-Google Colab users, the path string should be: '.\Dataset'
+	* For Google-Colab users, adjust the path string to the location of the dataset within your Google Drive
 
 ## Feature Extraction
 
-* Look for the line starting with " !cp "
-* This line should be commented out (it is used for Google Colab)
-* If not, make sure to comment it out
-* The rest of this section should run fine if MethodX.py is in the same directory as ECE_5831_Project_MethodX.ipynb/.py
+* Look for the line starting with "!cp" this line should be uncommented for Google Colab users and pointing to the correct library python file
+* For non-Google Colab users, this line should be commented out since the library file should already be in your current directory
+	* If not, make sure to comment it out
 		
 ## Training and Test Datasets
 
