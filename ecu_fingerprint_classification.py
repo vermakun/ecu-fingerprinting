@@ -81,58 +81,69 @@ for filename in file_list[0:10]:
 ### III. Feature Extraction ###
 print('\n--- Extract Features ---\n')
 
-# !cp '/content/drive/MyDrive/School/UMich Dearborn/SS21/ECE 5831/Project/ecu_fingerprinting_lib.py' .
+# !cp '/content/drive/MyDrive/School/UMich Dearborn/SS21/ECE 5831/Project/github/ecu_fingerprint_lib.py' .
 from ecu_fingerprint_lib import Record
 
-# Dict instantiation
-d = {}
+pkl_path = './ecu_fingerprint.pkl'
 
-# Iteratively build data dictionary
-for i in np.arange(len(file_list0)):
-
-  filepath  = file_list[i]
-  filepath0 = file_list0[i]
-
-  print(filepath)
-
-  # Extract folder name of current record
-  folder = os.path.basename(os.path.dirname(filepath0))
-  filename = os.path.basename(filepath0)
-
-  # Extract record identifiers
-  id, pl, pm, did = folder.split('_')
-  filename = re.split(r'_|\.',filename)
-
-  # Open File
-  with open(filepath) as file_name:
-    array = np.loadtxt(file_name, delimiter=",")
+if os.path.exists(pkl_path):
   
-  # Extract Features
-  r = Record(array)
+  print('Extracting Feature Data from previous run')
+  df = pd.read_pickle(pkl_path)
+
+else:
+
+  # Dict instantiation
+  d = {}
+
+  # Iteratively build data dictionary
+  for i in np.arange(len(file_list0)):
+
+    filepath  = file_list[i]
+    filepath0 = file_list0[i]
+
+    print(filepath)
+
+    # Extract folder name of current record
+    folder = os.path.basename(os.path.dirname(filepath0))
+    filename = os.path.basename(filepath0)
+
+    # Extract record identifiers
+    id, pl, pm, did = folder.split('_')
+    filename = re.split(r'_|\.',filename)
+
+    # Open File
+    with open(filepath) as file_name:
+      array = np.loadtxt(file_name, delimiter=",")
   
-  # Add Features and File Attributes to Dict
-  if i == 0:
-    #   File Metadata
-    d['Filepath']   = []
-    d['CAN_Id']     = []
-    d['CAN_PhyLen'] = []
-    d['CAN_PhyMat'] = []
-    d['CAN_RecId']  = []
-    #   Feature Data
-    for feature_name in r.headers:
-      d[feature_name]   = []
+    # Extract Features
+    r = Record(array)
+  
+    # Add Features and File Attributes to Dict
+    if i == 0:
+      #   File Metadata
+      d['Filepath']   = []
+      d['CAN_Id']     = []
+      d['CAN_PhyLen'] = []
+      d['CAN_PhyMat'] = []
+      d['CAN_RecId']  = []
+      #   Feature Data
+      for feature_name in r.headers:
+        d[feature_name]   = []
 
-  # Build data table
-  for k in np.arange(r.total_rec):
-    for j in np.arange(len(r.headers)):
-      d[r.headers[j]].append(r.features[j][k])
-    d['Filepath'].append(filepath)
-    d['CAN_Id'].append(id)
-    d['CAN_PhyLen'].append(pl)
-    d['CAN_PhyMat'].append(pm)
-    d['CAN_RecId'].append(filename[-2])
+    # Build data table
+    for k in np.arange(r.total_rec):
+      for j in np.arange(len(r.headers)):
+        d[r.headers[j]].append(r.features[j][k])
+      d['Filepath'].append(filepath)
+      d['CAN_Id'].append(id)
+      d['CAN_PhyLen'].append(pl)
+      d['CAN_PhyMat'].append(pm)
+      d['CAN_RecId'].append(filename[-2])
 
-df = pd.DataFrame.from_dict(d)
+  df = pd.DataFrame.from_dict(d)
+  df.to_pickle(pkl_path)
+
 print('\nDataFrame Object:\n')
 print(df.info())
 
@@ -234,7 +245,11 @@ print('    %s: %s' %(Y_test.dtype, Y_test.shape))
 print('\n--- Neural Network Training ---\n')
 
 from sklearn.neural_network import MLPClassifier
-mlp = MLPClassifier(hidden_layer_sizes=([3*len(df),]), max_iter=2000)
+
+hls = 250 
+mit = 500
+
+mlp = MLPClassifier(hidden_layer_sizes=([hls,]), max_iter=mit)
 mlp.fit(X_train, Y_train.ravel())
 Y_pred = mlp.predict(X_test)
 print('Hidden Layer Nodes:    ',len(mlp.coefs_[1]))
@@ -334,4 +349,4 @@ plt.bar(p5, err, width=bw)
 plt.xticks([p + bw for p in range(len(acc))], y.unique(), fontsize = 10)
 plt.legend(['Accuracy','Precision','Recall','F1 Score','Error'], fontsize = 10, bbox_to_anchor = (1, 0.67))
 
-
+print(np.average(acc))
