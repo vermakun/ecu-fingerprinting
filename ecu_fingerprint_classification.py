@@ -138,13 +138,63 @@ print(df.info())
 
 """# IV. Prepare Training and Test Datasets"""
 
-### IV. Prepare Traininf and Test Datasets ###
+### IV. Prepare Training and Test Datasets ###
 print('\n--- Training and Test Datasets ---\n')
 
 # Attribute and Label Datasets
 
-## Full, Dom, Rec
-X = df.iloc[:,5:]     # Full feature set                                        0.0%
+## Full, Spectral, Contrl, Dom, Rec                                                                     Acc %
+# X = df.iloc[:,5:]                                                               # Full feature set    98.76%
+# X = df.iloc[:,[12,13,14,15,16,17,18,19,20,21,22,23,24,32,33,34,35,36,37,38,39]] # Spectral Only       97.26%
+# X = df.iloc[:,[5,6,7,8,9,10,11,25,26,27,28,29,30,31]]                           # Control Only        97.17%
+# X = df.iloc[:, 5:24]                                                            # Dominant Only       98.14%
+# X = df.iloc[:,25:39]                                                            # Recessive Only      96.73%
+
+## Spectral Features (sorted by Accuracy)
+# X = df.iloc[:,[22,37]]                                                          # SNR                 95.23%
+# X = df.iloc[:,[23,38]]                                                          # Mean Freq           94.96%
+# X = df.iloc[:,[12,13,14,15,16,17,18,19,20,21,32,33,34,35,36]]                   # Spectral Density    92.93%
+# X = df.iloc[:,[24,39]]                                                          # Median Freq         91.34%
+
+## Spectral Features (added by rank)
+# X = df.iloc[:,[22,37]]                                                          # SNR                 95.23% [ ]
+# X = df.iloc[:,[22,23,37,38]]                                                    #  + Mean Freq        97.35% [+] <<<
+# X = df.iloc[:,[12,13,14,15,16,17,18,19,20,21,22,23,32,33,34,35,36,37,38]]       #  + Spectral Density 97.26% [-]
+# X = df.iloc[:,[12,13,14,15,16,17,18,19,20,21,22,23,32,33,34,35,36,37,38]]       #  + Median Freq      97.26% [-]
+
+## Control Features (sorted by Accuracy)
+# X = df.iloc[:,[ 8,28]]                                                          # Steady State Value  95.23%
+# X = df.iloc[:,[ 9,29]]                                                          # Steady State Error  95.05%
+# X = df.iloc[:,[ 6,26]]                                                          # Percent Overshoot   91.52%
+# X = df.iloc[:,[ 7,27]]                                                          # Settling Time       91.52%
+# X = df.iloc[:,[10,30]]                                                          # Rise Time           83.48%
+# X = df.iloc[:,[11,31]]                                                          # Delay Time          81.89%
+# X = df.iloc[:,[ 5,25]]                                                          # Peak Time           80.12%
+
+## Control Features (added by rank)
+# X = df.iloc[:,[8,28]]                                                           # SSV                 95.23% [ ]
+# X = df.iloc[:,[8,9,28,29]]                                                      #  + SSE              97.70% [+]
+# X = df.iloc[:,[6,8,9,26,28,29]]                                                 #  + %OS              98.32% [+] <<<
+# X = df.iloc[:,[6,7,8,9,26,27,28,29]]                                            #  + Ts               98.32% [=]
+# X = df.iloc[:,[6,7,8,9,10,26,27,28,29,30]]                                      #  + Tr               97.26  [-]
+# X = df.iloc[:,[6,7,8,9,10,11,26,27,28,29,30,31]]                                #  + Td               97.17% [-]
+# X = df.iloc[:,[ 5,25]]                                                          #  + Tp               97.17% [=]
+
+## All Features (added by rank)
+# X = df.iloc[:,[22,37]]                                                                   # SNR                95.23% [ ]
+# X = df.iloc[:,[8,22,28,37]]                                                              #  + SSV             97.53% [+]
+# X = df.iloc[:,[8,9,22,28,29,37]]                                                         #  + SSE             97.97% [+]
+# X = df.iloc[:,[8,9,22,23,28,29,37,38]]                                                   #  + Mean Freq.      98.59% [+]
+# X = df.iloc[:,[6,8,9,22,23,26,28,29,37,38]]                                              #  + %OS             98.94% [+] <<<
+# X = df.iloc[:,[6,7,8,9,22,23,26,27,28,29,37,38]]                                         #  + Ts              98.85% [-]
+# X = df.iloc[:,[6,7,8,9,22,23,24,26,27,28,29,37,38,39]]                                   #  + Med. Freq.      98.67% [-]
+# X = df.iloc[:,[6,8,9,12,13,14,15,16,17,18,19,20,21,22,23,26,28,29,32,33,34,35,36,37,38]] #  + SD              98.32% [-]
+# X = df.iloc[:,[10,30]]                                                                   #  + Tr              ...
+# X = df.iloc[:,[11,31]]                                                                   #  + Td              ...
+# X = df.iloc[:,[ 5,25]]                                                                   #  + Tp              ...
+
+## Final Feature Set: (Control) SSV, SSE, %OS (Spectral) SNR, Mean Freq.
+X = df.iloc[:,[6,8,9,22,23,26,28,29,37,38]]                                     # 99.12%
 
 y = df.iloc[:,1]
 
