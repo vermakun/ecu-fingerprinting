@@ -349,4 +349,4 @@ plt.bar(p5, err, width=bw)
 plt.xticks([p + bw for p in range(len(acc))], y.unique(), fontsize = 10)
 plt.legend(['Accuracy','Precision','Recall','F1 Score','Error'], fontsize = 10, bbox_to_anchor = (1, 0.67))
 
-print(np.average(acc))
+print("Overall ECU Classification Accuracy: %0.2f%%\n" % (100*np.average(acc)))
