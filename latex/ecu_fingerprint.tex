@@ -92,11 +92,11 @@ Intrusion detection system (IDS), electronic control unit (ECU), controller area
 
 \section{Introduction}
 
-Automotive electrical systems consist of several physically isolated Electronic Control Units (ECUs) that control various elements of the vehicles. Network messages are broadcast on an open bus architecture, where messages reach every ECU on the network. This topology is benefitial for free flow and access of information across the network, where and ECU can extract all the information they need from other ECUs while maintaing a low harness wiring cost.
+Automotive electrical systems consist of several physically isolated Electronic Control Units (ECUs) that control various functions and operations of a vehicle. Network messages are broadcast on an open bus architecture in which messages are broadcast to every ECU on the network. This topology is benefitial for free flow and access of information across the network, and an ECU can extract all the information they need from other ECUs while maintaing a low harness wiring cost and design complexity.
 
-Unfortunately, this also means that intrusive actors with physical access to the vehicle can spoof ECU messages quite easily, and there are growing concerns that they can also accomplish this remotely through increasing mobile network connectivity of modern vehicles.
+Unfortunately, this also means that intrusive actors with physical access to the vehicle can spoof ECU messages quite easily, and there are growing concerns that they can also accomplish this remotely through the increasing mobile network connectivity of modern vehicles.
 
-As described in Hafeez et. al. \cite{hafeez2019}, a method of CAN-channel signal characterization can be used to identify known ECUs on the network. In their paper, they adopted step-response signal characteristics to accomplish this task, but additional features from other areas of signal processing may provide additional accuracy.
+One solution to this problem is to somehow find unique identifiers for each ECU on the network. This can be accomplished in a number of ways, but it is important that the technique used for ECU identification creates enough contrast and uncorrelation from other ECUs that messages on the network can be classified accurately and with little confusion. A discussion on methods for identification will be discussed in Section \ref{sec:MDM}.
 
 Once known ECUs have been successfully identified and integrated into a detection model, the fingerprinting system can be begin to detect and isolate unknown ECU signatures, as seen in Fig \ref{fig:NetworkTopology}.
 
@@ -108,6 +108,19 @@ Once known ECUs have been successfully identified and integrated into a detectio
 \end{figure}
 
 The primary purpose of the system described in this paper is to verify messages coming from known ECUs using fingerprinting and pattern recognition techniques. It accomplishes this by relying on manufacturing and material variation in physical CAN channel wiring (material, length, shielding) and chipset/component part variance. An intrusive ECU can then be isolated using a fingerprinting module that runs in parallel with the network, sampling and checking messages to ensure unrecognized signals can be identified, alerted to, mitigated, ignored, and isolated.
+
+
+\section{Message Detection Methods} \label{sec:MDM}
+There are two main categories of classification that are discussed in the current literature on ECU Idenification and Fingerprinting: (i) message authentication code (MAC)-based approaches, and (ii) intrusion detection-based approaches.
+
+MAC-based methods achieve security by encrypting message payloads of a CAN-packet prior to transmission. In addition, a monitoring node provides authentications codes for each ECU and verifies encryption for all CAN messages. This approach can lead to transmission overhead on the order of 25-50\%, and higher data rates.
+
+Due to the transmission costs of MAC-based methods, researches have proposed intrusion detection system (IDS)-based approaches for CAN traffic analysis. IDS relies on the uniqueness of each ECU's operation and message transmission to create different performance profiles, or fingerprints. This may lead to additional components and processing requirements for each ECU, but the data-rate requirements of IDS are much lower than that of CAN, meaning that network bandwidth is not affected by the authentication system.
+
+There are four more specific methods that largely span IDS literature today: (a) (b) (c) (d)
+
+As described in Hafeez et. al. \cite{hafeez2019}, a method of CAN-channel signal characterization can be used to identify known ECUs on the network. In their paper, they adopted step-response signal characteristics to accomplish this task, but additional features from other areas of signal processing may provide additional classification accuracy.
+
 
 
 
