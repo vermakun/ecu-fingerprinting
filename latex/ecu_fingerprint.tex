@@ -115,12 +115,41 @@ There are two main categories of classification that are discussed in the curren
 
 MAC-based methods achieve security by encrypting message payloads of a CAN-packet prior to transmission. In addition, a monitoring node provides authentications codes for each ECU and verifies encryption for all CAN messages. This approach can lead to transmission overhead on the order of 25-50\%, and higher data rates.
 
-Due to the transmission costs of MAC-based methods, researches have proposed intrusion detection system (IDS)-based approaches for CAN traffic analysis. IDS relies on the uniqueness of each ECU's operation and message transmission to create different performance profiles, or fingerprints. This may lead to additional components and processing requirements for each ECU, but the data-rate requirements of IDS are much lower than that of CAN, meaning that network bandwidth is not affected by the authentication system.
+Due to the transmission costs of MAC-based methods, researches have proposed intrusion detection system (IDS)-based approaches for CAN traffic analysis. IDS relies on the uniqueness of each ECU's operation and message transmission to create different performance profiles. This may lead to additional components and processing requirements for each ECU, but the data-rate requirements of IDS are much lower than that of CAN, meaning that network bandwidth is not affected by the authentication system.
 
-There are four more specific methods that largely span IDS literature today: (a) (b) (c) (d)
+Additionally, there are four subclasses that span IDS literature today:
 
-As described in Hafeez et. al. \cite{hafeez2019}, a method of CAN-channel signal characterization can be used to identify known ECUs on the network. In their paper, they adopted step-response signal characteristics to accomplish this task, but additional features from other areas of signal processing may provide additional classification accuracy.
+\begin{enumerate}
 
+    \item Parameter Monitoring-based
+    
+        \medbreak
+        Parameter monitoring involves using periodic frequency and time-of-flight (remote frame) characteristics of messages to establish a baseline of behavior. Later, new messages are measured against the expected message parameters in order to identify suspicious or fraudulent messages. While this technique can be very useful, it has three limitations: (1) in frequency detection, the message signals under observation must be periodic, (2) remote frame detection requires an additional node to observe the time-of-flight behavior of other ECUs, (3) if the adversary has knowledge of the frequency or time-of-flight characteristics of the network they can easily spoof devices on the network.
+        \medbreak
+        
+    \item Information Theory-based
+    
+        \medbreak
+        Information theory-based IDS relies upon an ordered messaging schedule in which a specific sequence of messages is expected. If the sequence is violated, this indicates the presence of an attack. This can prove to be a fairly effective technique: Wang et. al. collected 6.673 million CAN packets for different vehicles \cite{wang2017hardware}, their experimental results showed that CAN message have low entropy of an average of 11.915 bits \cite{wang2017hardware}. The downside to this strategy is that information theory-based IDS is weak to attacks in which the number of malicious messages is small and does not increase CAN message entropy significantly.
+        \medbreak
+    
+    \item Machine Learning-based
+    
+        \medbreak
+        \textit{(Talk with Dr. Hafeez about a simpler explanation, this area seems overly broad and my thoughts on the concept are not concrete)}
+        \medbreak
+        
+    \item Fingerprinting-based
+    
+        \medbreak
+        Fingerprinting-based IDS involves measuring physical characteristics of message packets sent from other ECUs on the network. There are many characteristics that can be extracted from signals and messages observed on the CAN bus, and therefore it is a method that can be implemented in many different ways.
+        
+        In this work, we will be looking for fingerprinting solutions that involve a number of different physical signal characteristics. Previous works have employed techniques such as clock based intrusion detection (CIDS), time-domain features, and frequency-domain features. Looking for cominations of these features that maximize the accuracy of classification is the main focus of this work.
+        \medbreak
+    
+\end{enumerate}
+
+Hafeez et. al. \cite{hafeez2019} provided performance metrics on one fingerprinting method, adoptig the use of step-response signal characteristics. We will elaborate further on this work to see if we can replicate their results and improve upon accuracy with further modifications to their approach.
 
 
 
@@ -356,7 +385,7 @@ Mean Frequency can be calculated directly from the PSD and frequency vector data
 Median Frequency is the frequency at which energy is split equivalent in the PSD \cite{angkoon2012}. PSD is normalized, cumulatively summed, offset by 0.5, and an absolute value is applied.  Median Frequency is found by locating the frequency at which a minima occurs in this data vector (Fig. \ref{fig:MDF}).
 
 \begin{equation*}
-    \sum_{j=1}^{MDF} P_j = \sum_{j=MDF}^(M) P_j = \frac{1}{2} \sum_{j=1}^{M} P_j
+    \sum_{j=1}^{MDF} P_j = \sum_{j=MDF}^{M} P_j = \frac{1}{2} \sum_{j=1}^{M} P_j
 \end{equation*}
 
 \medbreak
@@ -385,7 +414,9 @@ Once this datadictionary was converted to a Pandas DataFrame, it could easily be
 
 
 \section{Machine Learning Methodology}
-Before training can occur, the dataset is split into a training and test set. A split of 70\% Training Data and 30\% Test Data was chosen. For the majority of development, this split in the data was not randomized in order to attain a consistent understanding of performance acrossing different subsets of features. After generalized performance was recorded, the training and datasets were completely randomized run to run in order to remove and training bias and overfitting that could influence performance results.
+Before training can occur, the dataset is split into a training and test set. A split of 70\% Training Data and 30\% Test Data was chosen. In early development, data was not split randomly in order to maintain a consistent understanding of performance acrossing different subsets of features. Performance trends were measured using 5 different seeds.
+
+After generalized performance was recorded, the training and datasets were completely randomized, run to run, in order to remove any training bias and overfitting that could influence performance results.
 
 For all featuresets in this work, we trained a multi-layer perceptron neural network model to predict classifications for ECU in our testing set. We adopted use of the \textit{scikit-learn} MLPClassifier, which by default utilizes the Adam solver \cite{kingma2017adam}. For initial training, the hyperparameter values were chosen to be quite large in order to allow the solver to converge to a maximal solution. Early training typically used ~1000 Hidden Layers, ~3000 Epochs.
 
